@@ -13,7 +13,8 @@
       <pubDate>Tue, 22 Sep 2020 21:28:00 +0000</pubDate>
       
       <guid>http://example.org/posts/my-first-post/</guid>
-      <description>Launching my blog!</description>
+      <description>Launching my blog!
+Building with AWS codebuild</description>
     </item>
     
   </channel>
