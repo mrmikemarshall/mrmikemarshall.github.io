@@ -27,23 +27,23 @@
     
     
     <meta property="og:title" content="Managing the world through a keyhole" />
-<meta property="og:description" content="Managing the world through a keyhole There are a few AWS services which seem to fall into the category of managing the world through a keyhole. I like to say, if I can see it, I can troubleshoot it. One example is AWS Fargate, a powerful container orchestration option of ECS (Amazon Elastic Container Service). With Fargate, you quickly realize that you have no console, no way to see what is going on realtime, basically running blind." />
+<meta property="og:description" content="There are a few AWS services which seem to fall into the category of managing the world through a keyhole. I like to say, if I can see it, I can troubleshoot it. One example is AWS Fargate, a powerful container orchestration option of ECS (Amazon Elastic Container Service). With Fargate, you quickly realize that you have no console, no way to see what is going on realtime, basically running blind." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://mrmikemarshall.github.io/posts/post-2020-09-25/" />
-<meta property="article:published_time" content="2020-09-26T02:42:42+00:00" />
-<meta property="article:modified_time" content="2020-09-26T02:42:42+00:00" />
+<meta property="article:published_time" content="2020-09-25T02:42:42+00:00" />
+<meta property="article:modified_time" content="2020-09-25T02:42:42+00:00" />
 <meta itemprop="name" content="Managing the world through a keyhole">
-<meta itemprop="description" content="Managing the world through a keyhole There are a few AWS services which seem to fall into the category of managing the world through a keyhole. I like to say, if I can see it, I can troubleshoot it. One example is AWS Fargate, a powerful container orchestration option of ECS (Amazon Elastic Container Service). With Fargate, you quickly realize that you have no console, no way to see what is going on realtime, basically running blind.">
-<meta itemprop="datePublished" content="2020-09-26T02:42:42+00:00" />
-<meta itemprop="dateModified" content="2020-09-26T02:42:42+00:00" />
-<meta itemprop="wordCount" content="226">
+<meta itemprop="description" content="There are a few AWS services which seem to fall into the category of managing the world through a keyhole. I like to say, if I can see it, I can troubleshoot it. One example is AWS Fargate, a powerful container orchestration option of ECS (Amazon Elastic Container Service). With Fargate, you quickly realize that you have no console, no way to see what is going on realtime, basically running blind.">
+<meta itemprop="datePublished" content="2020-09-25T02:42:42+00:00" />
+<meta itemprop="dateModified" content="2020-09-25T02:42:42+00:00" />
+<meta itemprop="wordCount" content="220">
 
 
 
 <meta itemprop="keywords" content="" />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Managing the world through a keyhole"/>
-<meta name="twitter:description" content="Managing the world through a keyhole There are a few AWS services which seem to fall into the category of managing the world through a keyhole. I like to say, if I can see it, I can troubleshoot it. One example is AWS Fargate, a powerful container orchestration option of ECS (Amazon Elastic Container Service). With Fargate, you quickly realize that you have no console, no way to see what is going on realtime, basically running blind."/>
+<meta name="twitter:description" content="There are a few AWS services which seem to fall into the category of managing the world through a keyhole. I like to say, if I can see it, I can troubleshoot it. One example is AWS Fargate, a powerful container orchestration option of ECS (Amazon Elastic Container Service). With Fargate, you quickly realize that you have no console, no way to see what is going on realtime, basically running blind."/>
 
 	
   </head>
@@ -134,13 +134,12 @@
       <h1 class="f1 athelas mt3 mb1">Managing the world through a keyhole</h1>
       
       
-      <time class="f6 mv4 dib tracked" datetime="2020-09-26T02:42:42Z">September 26, 2020</time>
+      <time class="f6 mv4 dib tracked" datetime="2020-09-25T02:42:42Z">September 25, 2020</time>
 
       
       
     </header>
-    <div class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l"><h1 id="managing-the-world-through-a-keyhole">Managing the world through a keyhole</h1>
-<p>There are a few AWS services which seem to fall into the category of <em>managing the world through a keyhole</em>.  I like to say, if I can see it, I can troubleshoot it.  One example is AWS Fargate, a powerful container orchestration option of ECS (Amazon Elastic Container Service).  With Fargate, you quickly realize that you have no console, no way to see what is going on realtime, basically running blind.  However, with a bit ingenuity, this to can be overcome.  To be honest, although frustrating at first, one of the most attractive things about AWS is that they allow you to combine any of their 100+ services any way you can dream up to engineer solutions to even the trickiest problems.</p>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l"><p>There are a few AWS services which seem to fall into the category of <em>managing the world through a keyhole</em>.  I like to say, if I can see it, I can troubleshoot it.  One example is AWS Fargate, a powerful container orchestration option of ECS (Amazon Elastic Container Service).  With Fargate, you quickly realize that you have no console, no way to see what is going on realtime, basically running blind.  However, with a bit ingenuity, this to can be overcome.  To be honest, although frustrating at first, one of the most attractive things about AWS is that they allow you to combine any of their 100+ services any way you can dream up to engineer solutions to even the trickiest problems.</p>
 <p>I am going to author a series of blog posts detailing tricky technical roadblocks, some seemingly insurmountable, I encountered and solved while architecting a large scale installation of a popular log and metric aggregation system using <a href="https://aws.amazon.com/fargate/">AWS Fargate</a>, <a href="https://aws.amazon.com/cloudformation/">AWS CloudFormation</a>, and now <a href="https://www.terraform.io/">Terrafrom</a>.</p>
 <p>As for lack of visibility when using Fargate containers, here are a couple of tools I use:</p>
 <ol>
