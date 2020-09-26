@@ -6,16 +6,7 @@
     <description>Recent content in Posts on Journey to the Cloud and Beyond</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 25 Sep 2020 03:31:42 +0000</lastBuildDate><atom:link href="https://mrmikemarshall.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>CICD Blog Post</title>
-      <link>https://mrmikemarshall.github.io/posts/cicd-blog-post/</link>
-      <pubDate>Fri, 25 Sep 2020 03:31:42 +0000</pubDate>
-      
-      <guid>https://mrmikemarshall.github.io/posts/cicd-blog-post/</guid>
-      <description>This content is being deployed on repo push!</description>
-    </item>
-    
+    <lastBuildDate>Fri, 25 Sep 2020 02:42:42 +0000</lastBuildDate><atom:link href="https://mrmikemarshall.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Managing the world through a keyhole</title>
       <link>https://mrmikemarshall.github.io/posts/post-2020-09-25/</link>
@@ -23,6 +14,15 @@
       
       <guid>https://mrmikemarshall.github.io/posts/post-2020-09-25/</guid>
       <description>There are a few AWS services which seem to fall into the category of managing the world through a keyhole. I like to say, if I can see it, I can troubleshoot it. One example is AWS Fargate, a powerful container orchestration option of ECS (Amazon Elastic Container Service). With Fargate, you quickly realize that you have no console, no way to see what is going on realtime, basically running blind.</description>
+    </item>
+    
+    <item>
+      <title>CICD Blog Post</title>
+      <link>https://mrmikemarshall.github.io/posts/cicd-blog-post/</link>
+      <pubDate>Thu, 24 Sep 2020 03:31:42 +0000</pubDate>
+      
+      <guid>https://mrmikemarshall.github.io/posts/cicd-blog-post/</guid>
+      <description>This content is being deployed on repo push!</description>
     </item>
     
     <item>
