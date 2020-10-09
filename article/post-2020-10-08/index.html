@@ -14,18 +14,19 @@
     <title>
         
            
-               Tags &vert; Journey to the Cloud and Beyond
+               Terraform Learnings &vert; Journey to the Cloud and Beyond
            
         
     </title>
-    <meta name="description" content="Tags - Journey to the Cloud and Beyond">
-    <meta itemprop="name" content="Tags">
-    <meta itemprop="description" content="Tags - Journey to the Cloud and Beyond">
-    <meta property="og:title" content="Tags">
-    <meta property="og:description" content="Tags - Journey to the Cloud and Beyond">
+    <meta name="description" content="Terraform Learnings - Journey to the Cloud and Beyond">
+    <meta itemprop="name" content="Terraform Learnings">
+    <meta itemprop="description" content="Terraform Learnings - Journey to the Cloud and Beyond">
+    <meta property="og:title" content="Terraform Learnings">
+    <meta property="og:description" content="Terraform Learnings - Journey to the Cloud and Beyond">
     <meta property="og:image" content="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?size=200">
-    <meta property="og:url" content="https://mrmikemarshall.github.io/tags/">
-    <meta property="og:site_name" content="Journey to the Cloud and Beyond"><meta property="og:type" content="website">
+    <meta property="og:url" content="https://mrmikemarshall.github.io/article/post-2020-10-08/">
+    <meta property="og:site_name" content="Journey to the Cloud and Beyond">
+    <meta property="og:type" content="article">
 
     
 
@@ -33,8 +34,8 @@
     <script src="/modernizr-simple.js"></script>
 
     
-    <link href="/tags/" rel="alternate" type="application/rss+xml" title="Journey to the Cloud and Beyond" />
-    <link href="/tags/" rel="feed" type="application/rss+xml" title="Journey to the Cloud and Beyond" />
+    <link href="/article/post-2020-10-08/" rel="alternate" type="application/rss+xml" title="Journey to the Cloud and Beyond" />
+    <link href="/article/post-2020-10-08/" rel="feed" type="application/rss+xml" title="Journey to the Cloud and Beyond" />
     
 
     
@@ -103,24 +104,95 @@
 
     <div class="main container">
         
-
-<div class="content">
     <div class="article-wrapper u-cf single">
-        <a class="bubble" href="/tags/">
-            <i class="fa fa-fw fa-tag"></i>
-        </a>
+        
+            <a class="bubble" href="https://mrmikemarshall.github.io/article/post-2020-10-08/">
+    <i class="fas fa-fw fa-pencil-alt"></i>
+</a>
 
-        <article class="article">
-            <div class="content">
-                <h3>Tags</h3>
-                <hr>
-                <ul id="all-categories">
-                    
-                </ul>
-            </div>
-        </article>
+<article class="default article">
+    
+
+    <div class="content">
+    <h1 class="article-title">
+        <a href="https://mrmikemarshall.github.io/article/post-2020-10-08/">
+            Terraform Learnings
+        </a>
+    </h1>
+
+    <div class="meta">
+        
+            
+                <span class="date moment">2020-10-08</span>
+            
+        
+
+        
+
+        
+
+        
     </div>
+
+    
+        
+
+        <p>A key feature of using Terraform is idempotency of Infrastructure as Code.<br>
+Use of depends_on pointed at a data source can result resources being redeployed.  Today I solved a problem where this principal  was a bit less intuitive, had the same effect.  The module I was using leveraged a null_resource to execute a local command when a config file changed.  The triggers block referenced a external data source to calculate the md5 checksum of the config file.
+Fortunately, I was able to solve the problem buy replacing the external data source with the native filemd5() terraform function.  In my case, I was utilizing this module with for_each looping through a large map of objects.  With every terraform apply, all resources associated config files would redeploy rendering the triggers block useless.</p>
+<p>Before:</p>
+<pre><code>data &quot;external&quot; &quot;configuration&quot; {
+  # get md5 checksum of config file and return it to terraform { “md5”: “hash result here” }
+}
+
+resource &quot;null_resource&quot; &quot;something_changed&quot; {
+  triggers = {
+    config_file = data.external.configuration.result.md5
+  }
+
+  provisioner &quot;local-exec&quot; {
+    # do something if config file has changed 
+  }
+}
+</code></pre><p>After:</p>
+<pre><code>resource &quot;null_resource&quot; &quot;something_changed&quot; {
+  triggers = {
+    config_file = filemd5(“${path.module}/file.conf”)
+  }
+
+  provisioner &quot;local-exec&quot; {
+    # do something if config file has changed 
+  }
+}
+</code></pre><p>In conclusion, terraform data sources are invaluable, however require extra careful placement within terraform code to avoid undesirable redeployment results.</p>
+<p>Reference:
+<a href="https://registry.terraform.io/providers/hashicorp/external/latest/docs/data-sources/data_source#example-usage">https://registry.terraform.io/providers/hashicorp/external/latest/docs/data-sources/data_source#example-usage</a>
+<a href="https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource">https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource</a></p>
+
+    
 </div>
+
+    
+<div class="footer no-tags">
+
+
+    
+
+    
+</div>
+
+</article>
+
+        
+    </div>
+
+    
+        <div id="comments-container">
+            
+            
+
+        </div>
+    
 
     </div>
 
@@ -187,8 +259,7 @@
                 
                 by Mike Marshall
             </a>
-            -
-            <a href="https://mrmikemarshall.github.io/tags/index.xml">RSS</a>
+            
         </div>
         <div class="author">
             <a href="https://github.com/Lednerb/bilberry-hugo-theme"
