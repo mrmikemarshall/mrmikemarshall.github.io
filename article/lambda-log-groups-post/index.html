@@ -1,0 +1,307 @@
+
+  
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="siteBaseUrl" content="https://mrmikemarshall.github.io">
+    <meta name="author" content="mrmikemarshall">
+    <meta name="description" content="Journey to the Cloud and Beyond">
+    <meta name="keywords" content="blog,aws,devops,cicd,cloud,automation,kubernetes,docker,fargate,terraform">
+    <meta name="generator" content="Hugo 0.75.1" />
+    <title>
+        
+           
+               How deploying lambda with Terraform is a Win-Win &vert; Journey to the Cloud and Beyond
+           
+        
+    </title>
+    <meta name="description" content="How deploying lambda with Terraform is a Win-Win - Journey to the Cloud and Beyond">
+    <meta itemprop="name" content="How deploying lambda with Terraform is a Win-Win">
+    <meta itemprop="description" content="How deploying lambda with Terraform is a Win-Win - Journey to the Cloud and Beyond">
+    <meta property="og:title" content="How deploying lambda with Terraform is a Win-Win">
+    <meta property="og:description" content="How deploying lambda with Terraform is a Win-Win - Journey to the Cloud and Beyond">
+    <meta property="og:image" content="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?size=200">
+    <meta property="og:url" content="https://mrmikemarshall.github.io/article/lambda-log-groups-post/">
+    <meta property="og:site_name" content="Journey to the Cloud and Beyond">
+    <meta property="og:type" content="article">
+
+    
+
+
+    <script src="/modernizr-simple.js"></script>
+
+    
+    <link href="/article/lambda-log-groups-post/" rel="alternate" type="application/rss+xml" title="Journey to the Cloud and Beyond" />
+    <link href="/article/lambda-log-groups-post/" rel="feed" type="application/rss+xml" title="Journey to the Cloud and Beyond" />
+    
+
+    
+
+    <link rel="stylesheet" href="https://mrmikemarshall.github.io/theme.css">
+
+    
+
+    
+        
+    
+</head>
+
+<body class="bilberry-hugo-theme">
+
+    
+    <nav>
+
+    <div class="container">
+        <ul class="topnav">
+            
+                
+                    <li><a href="https://mrmikemarshall.github.io/page/about/">About</a></li>
+                
+            
+        </ul>
+
+        
+    </div>
+</nav>
+
+
+    
+    <header>
+
+        <div class="container">
+            <div class="logo">
+                <a href="/" class="logo">
+                    
+                        <img src="/img/headshot.jpeg" alt="">
+                    
+
+                    <span class="overlay"><i class="fa fa-home"></i></span>
+                </a>
+            </div>
+            <div class="titles">
+                <h3 class="title">
+                    <a href="/">
+                        Journey to the Cloud and Beyond
+                    </a>
+                </h3>
+
+                
+            </div>
+
+            
+
+            
+                <div class="toggler">
+            
+                    <i class="fa fa-bars" aria-hidden="true"></i>
+                </div>
+            </div>
+    </header>
+
+
+    <div class="main container">
+        
+    <div class="article-wrapper u-cf single">
+        
+            <a class="bubble" href="https://mrmikemarshall.github.io/article/lambda-log-groups-post/">
+    <i class="fas fa-fw fa-pencil-alt"></i>
+</a>
+
+<article class="default article">
+    
+
+    <div class="content">
+    <h1 class="article-title">
+        <a href="https://mrmikemarshall.github.io/article/lambda-log-groups-post/">
+            How deploying lambda with Terraform is a Win-Win
+        </a>
+    </h1>
+
+    <div class="meta">
+        
+            
+                <span class="date moment">2021-02-21</span>
+            
+        
+
+        
+
+        
+
+        
+    </div>
+
+    
+        
+
+        <p>In this blog post I will demonstrate how selecting the best tool for the job in the end can pay off resulting in both reduced complexity and lower costs.</p>
+<p>I was recently tasked with exporting CloudWatch logs from multiple AWS accounts into Grafana Loki, hosted in a central logging AWS account. My architecture leverages the event driven design pattern of subscribing a log sender Lambda function to a set of CloudWatch log groups.  The Lambda function is triggered as logs are written to each log group.  I then funnel the logs from each account into a single AWS SQS FIFO (First-In-First-Out) queue residing in the central logging account.  At the receiving end, a log router lambda which gets triggered by SQS when messages arrive on the queue.  I use this Lambda to route log records to instances of Fluent-Bit (blog post coming soon) and from there into Grafana Loki and Prometheus metrics (more the metrics in a future blog post).</p>
+<p>This architecture works well, however I ran into a limitation I’d not experienced before.  Till now I’ve mostly leveraged Serverless Framework for deploying Lambda code to AWS.  Serverless Framework generates a CloudFormation Template from it’s YAML configuration files which deploys the Lambda code and any additional infrastructure required to operate.  It turns out the maximum number of resources that a single CloudFormation Template (CFT) can contain is 500.  When deploying the architecture described above, roughly every 20 log groups requires a new CFT stack as that limit is quickly exceeded .  This also means a new copy of the same Lambda with a different name for every 20 log groups.   This is quickly becomes maintenance nightmare in the making.</p>
+<p>Terraform to the rescue!  Unlike CloudFormation, Terraform interacts directly with AWS APIs to create and destroy resources. As a result, there is no maximum resource limit.</p>
+<p>Using one of the Serverless Framework generated CFTs as a guide, I developed an equivalent Terraform project.</p>
+<p>Result:</p>
+<p>It works very nicely!</p>
+<p>Aside from the accomplishing the goal of overcoming the 500 max resource limitation, a couple of bonus benefits came with the Terraform implementation.</p>
+<p>Firstly, equivalent deployments can now see a reduction of roughly 10:1 in the required resource count and as a result, a lower cost.</p>
+<p>Ex. Single lambda subscribed to 47 log groups:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Resource count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Serverless Framework</td>
+<td>~1200</td>
+</tr>
+<tr>
+<td>Terraform</td>
+<td>~100</td>
+</tr>
+</tbody>
+</table>
+<p>Secondly, changes to the Lambda function code or subscribed Log groups can be made with zero impact.</p>
+<p>To summarize, in this specific case, deciding to deviate from the norm and rewrite the deployment automation using using Terraform rather than industry tested Serverless Framework, resulted in a huge pay off.  Simpler maintenance and a lower AWS bill are definitely win-wins for any organization.</p>
+<p>Resources referenced:</p>
+<p><a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/SubscriptionFilters.html#LambdaFunctionExample">https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/SubscriptionFilters.html#LambdaFunctionExample</a>
+<a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cloudformation-limits.html">https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cloudformation-limits.html</a>
+<a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html">https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html</a>
+<a href="https://www.serverless.com/">https://www.serverless.com/</a>
+<a href="https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function">https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function</a>
+<a href="https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_subscription_filter">https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_subscription_filter</a></p>
+
+    
+</div>
+
+    
+<div class="footer no-tags">
+
+
+    
+
+    
+</div>
+
+</article>
+
+        
+    </div>
+
+    
+        <div id="comments-container">
+            
+            
+
+        </div>
+    
+
+    </div>
+
+    
+<footer>
+    <div class="container">
+
+        
+        <div class="recent-posts">
+            <strong>Latest posts</strong>
+            <ul>
+                
+                
+                    <li>
+                        <a href="https://mrmikemarshall.github.io/article/lambda-log-groups-post/">How deploying lambda with Terraform is a Win-Win</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://mrmikemarshall.github.io/article/post-2020-10-08/">Terraform Learnings</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://mrmikemarshall.github.io/article/post-2020-09-25/">Managing the world through a keyhole</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://mrmikemarshall.github.io/article/cicd-blog-post/">CICD Blog Post</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://mrmikemarshall.github.io/article/my-first-post/">My First Post</a>
+                    </li>
+                
+            </ul>
+        </div>
+        
+
+        
+
+        <div class="right">
+            
+            <div class="external-profiles">
+                <strong>Social media</strong>
+
+                
+                <a href="https://twitter.com/mrmikemarshall" target="_blank"><i class="fab fa-twitter"></i></a>
+                
+                <a href="https://github.com/mrmikemarshall" target="_blank"><i class="fab fa-github"></i></a>
+                
+                <a href="http://linkedin.com/in/mrmikemarshall" target="_blank"><i class="fab fa-linkedin"></i></a>
+                
+            </div>
+            
+
+            
+        </div>
+    </div>
+</footer>
+
+
+<div class="credits">
+    <div class="container">
+        <div class="copyright">
+            <a href="https://github.com/mrmikemarshall" target="_blank">
+                &copy;
+                
+                2021
+                
+                by Mike Marshall
+            </a>
+            
+        </div>
+        <div class="author">
+            <a href="https://github.com/Lednerb/bilberry-hugo-theme"
+                target="_blank">Bilberry Hugo Theme</a>
+        </div>
+    </div>
+</div>
+
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-180168051-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+    
+
+
+    <script type="text/javascript" src="https://mrmikemarshall.github.io/theme.js"></script>
+
+    
+    
+    
+
+    
+</body>
+
+</html>
