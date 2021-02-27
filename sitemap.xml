@@ -5,58 +5,82 @@
   <url>
     <loc>https://mrmikemarshall.github.io/article/</loc>
     <lastmod>2021-02-21T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://mrmikemarshall.github.io/article/lambda-log-groups-post/</loc>
     <lastmod>2021-02-21T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://mrmikemarshall.github.io/</loc>
     <lastmod>2021-02-21T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://mrmikemarshall.github.io/article/post-2020-10-08/</loc>
     <lastmod>2020-10-08T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://mrmikemarshall.github.io/page/about/</loc>
     <lastmod>2020-09-26T13:13:06-04:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://mrmikemarshall.github.io/page/</loc>
     <lastmod>2020-09-26T13:13:06-04:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://mrmikemarshall.github.io/article/post-2020-09-25/</loc>
     <lastmod>2020-09-25T02:42:42+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://mrmikemarshall.github.io/article/cicd-blog-post/</loc>
     <lastmod>2020-09-24T03:31:42+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://mrmikemarshall.github.io/article/my-first-post/</loc>
     <lastmod>2020-09-22T21:28:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://mrmikemarshall.github.io/author/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://mrmikemarshall.github.io/categories/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://mrmikemarshall.github.io/tags/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
   
 </urlset>
