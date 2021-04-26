@@ -14,17 +14,17 @@
     <title>
         
            
-               Managing the world through a keyhole &vert; Journey to the Cloud and Beyond
+               Observability Log Derived Metrics - Game Changer &vert; Journey to the Cloud and Beyond
            
         
     </title>
-    <meta name="description" content="Managing the world through a keyhole - Journey to the Cloud and Beyond">
-    <meta itemprop="name" content="Managing the world through a keyhole">
-    <meta itemprop="description" content="Managing the world through a keyhole - Journey to the Cloud and Beyond">
-    <meta property="og:title" content="Managing the world through a keyhole">
-    <meta property="og:description" content="Managing the world through a keyhole - Journey to the Cloud and Beyond">
+    <meta name="description" content="Observability Log Derived Metrics - Game Changer - Journey to the Cloud and Beyond">
+    <meta itemprop="name" content="Observability Log Derived Metrics - Game Changer">
+    <meta itemprop="description" content="Observability Log Derived Metrics - Game Changer - Journey to the Cloud and Beyond">
+    <meta property="og:title" content="Observability Log Derived Metrics - Game Changer">
+    <meta property="og:description" content="Observability Log Derived Metrics - Game Changer - Journey to the Cloud and Beyond">
     <meta property="og:image" content="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?size=200">
-    <meta property="og:url" content="https://mrmikemarshall.github.io/article/post-2020-09-25/">
+    <meta property="og:url" content="https://mrmikemarshall.github.io/article/log-derived-metrics-game-changer/">
     <meta property="og:site_name" content="Journey to the Cloud and Beyond">
     <meta property="og:type" content="article">
 
@@ -34,8 +34,8 @@
     <script src="/modernizr-simple.js"></script>
 
     
-    <link href="/article/post-2020-09-25/" rel="alternate" type="application/rss+xml" title="Journey to the Cloud and Beyond" />
-    <link href="/article/post-2020-09-25/" rel="feed" type="application/rss+xml" title="Journey to the Cloud and Beyond" />
+    <link href="/article/log-derived-metrics-game-changer/" rel="alternate" type="application/rss+xml" title="Journey to the Cloud and Beyond" />
+    <link href="/article/log-derived-metrics-game-changer/" rel="feed" type="application/rss+xml" title="Journey to the Cloud and Beyond" />
     
 
     
@@ -106,7 +106,7 @@
         
     <div class="article-wrapper u-cf single">
         
-            <a class="bubble" href="https://mrmikemarshall.github.io/article/post-2020-09-25/">
+            <a class="bubble" href="https://mrmikemarshall.github.io/article/log-derived-metrics-game-changer/">
     <i class="fas fa-fw fa-pencil-alt"></i>
 </a>
 
@@ -115,15 +115,15 @@
 
     <div class="content">
     <h1 class="article-title">
-        <a href="https://mrmikemarshall.github.io/article/post-2020-09-25/">
-            Managing the world through a keyhole
+        <a href="https://mrmikemarshall.github.io/article/log-derived-metrics-game-changer/">
+            Observability Log Derived Metrics - Game Changer
         </a>
     </h1>
 
     <div class="meta">
         
             
-                <span class="date moment">2020-09-25</span>
+                <span class="date moment">2021-04-10</span>
             
         
 
@@ -137,13 +137,26 @@
     
         
 
-        <p>There are a few AWS services which seem to fall into the category of <em>managing the world through a keyhole</em>.  I like to say, if I can see it, I can troubleshoot it.  One example is AWS Fargate, a powerful container orchestration option of ECS (Amazon Elastic Container Service).  With Fargate, you quickly realize that you have no console, no way to see what is going on realtime, basically running blind.  However, with a bit ingenuity, this to can be overcome.  To be honest, although frustrating at first, one of the most attractive things about AWS is that they allow you to combine any of their 100+ services any way you can dream up to engineer solutions to even the trickiest problems.</p>
-<p>I am going to author a series of blog posts detailing tricky technical roadblocks, some seemingly insurmountable, I encountered and solved while architecting a large scale installation of a popular log and metric aggregation system using <a href="https://aws.amazon.com/fargate/">AWS Fargate</a>, <a href="https://aws.amazon.com/cloudformation/">AWS CloudFormation</a>, and now <a href="https://www.terraform.io/">Terrafrom</a>.</p>
-<p>As for lack of visibility when using Fargate containers, here are a couple of tools I use:</p>
-<ol>
-<li>Cloudwatch Logs + AWS Container Insights</li>
-<li>Build a customized docker container setup to do reconnaissance.  This was extremely valuable.  Send output to STDOUT and pick it up from Cloudwatch Logs.  This takes the guesswork out of the equation.</li>
-</ol>
+        <p>Instrumenting cloud native applications for data observability can be challenging.</p>
+<p>Regardless of which cloud native design pattern you are using for your application, you likely have logs.  We all have logs.  Logs aid in troubleshooting, application management, and keeping track of what an application is doing.</p>
+<p>However, too many logs can quickly become unmanageable.  To tame the logs and gain additional valuable insight, consider pushing them into a Data Observability Platform for monitoring the health of your application.</p>
+<p>In my case, that Data Observability Platform consists of a carefully selected combination of CNCF projects:</p>
+<ul>
+<li>Grafana</li>
+<li>Grafana Loki Logs</li>
+<li>Prometheus Metrics</li>
+<li>Cortex Metrics</li>
+</ul>
+<p>With the help of a good data observability platform, you can visualize the health of your application using dashboards, answer complex questions using adhoc queries, and receive a heads up when things aren’t quite right using thresholds and automated alerting.</p>
+<p>The two ingredients for a successful data observability platform are logs and metrics.</p>
+<p>This brings to the concept of Log Derived Metrics.  Check two boxes at once while saving compute cycles.  Generate logs that contain data useful for troubleshooting and include performance related data at the same time.</p>
+<p>Setup one or more Fluent Bit service as log ingestion endpoints for your data observability platform.  Push logs to Fluent Bit for preprocessing, field extraction, routing logic.  Implement log derived metrics by leveraging my prometheus metrics fluent bit output plugin:</p>
+<p><a href="https://github.com/neiman-marcus/fluent-bit-out-prometheus-metrics">https://github.com/neiman-marcus/fluent-bit-out-prometheus-metrics</a></p>
+<p>At the same time send the log data to Grafana Loki logs using the Loki output plugin.</p>
+<p>Build dahsboards that leverage both log and metrics Grafana datasources to monitor the health of your application.</p>
+<p>Learn how to do this much more plus a demo by attending my (virtual) talk at FluentCon 2021 Europe on May 4th:</p>
+<p><a href="https://sched.co/iKok">Fluent Bit - Swiss Army Tool of Observability Data Ingestion - Michael Marshall</a></p>
+<p>Hope to see you there!</p>
 
     
 </div>

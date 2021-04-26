@@ -5,10 +5,21 @@
     <description>Recent content on Journey to the Cloud and Beyond</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 21 Feb 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 10 Apr 2021 15:47:42 +0000</lastBuildDate>
     
         <atom:link href="https://mrmikemarshall.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Observability Log Derived Metrics - Game Changer</title>
+      <link>https://mrmikemarshall.github.io/article/log-derived-metrics-game-changer/</link>
+      <pubDate>Sat, 10 Apr 2021 15:47:42 +0000</pubDate>
+      
+      <guid>https://mrmikemarshall.github.io/article/log-derived-metrics-game-changer/</guid>
+      <description>Instrumenting cloud native applications for data observability can be challenging.
+Regardless of which cloud native design pattern you are using for your application, you likely have logs. We all have logs. Logs aid in troubleshooting, application management, and keeping track of what an application is doing.
+However, too many logs can quickly become unmanageable. To tame the logs and gain additional valuable insight, consider pushing them into a Data Observability Platform for monitoring the health of your application.</description>
+    </item>
     
     <item>
       <title>How deploying AWS Lambda with Terraform is a Win-Win</title>
