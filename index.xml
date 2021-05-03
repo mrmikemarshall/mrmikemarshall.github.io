@@ -5,10 +5,23 @@
     <description>Recent content on Journey to the Cloud and Beyond</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 10 Apr 2021 15:47:42 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 02 May 2021 17:47:42 +0000</lastBuildDate>
     
         <atom:link href="https://mrmikemarshall.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>“Open Source Cloud Native Data Observability”</title>
+      <link>https://mrmikemarshall.github.io/article/open-source-cloud-native-data-observability/</link>
+      <pubDate>Sun, 02 May 2021 17:47:42 +0000</pubDate>
+      
+      <guid>https://mrmikemarshall.github.io/article/open-source-cloud-native-data-observability/</guid>
+      <description>With less than 48 hours until FluentCon 2021 Europe, I’m so excited to see lots of people signing up for my talk on May 4th:
+Fluent Bit - Swiss Army Tool of Observability Data Ingestion - Michael Marshall
+Prior to FluentCon, I wanted to announce an open source project I just released in hope that it would be of use to the wider community:
+https://github.com/neiman-marcus/fluent-bit-data-observability-platform
+In short, this project is a Docker-Compose based, miniature version of it’s much larger production equivalent we host in the cloud today.</description>
+    </item>
     
     <item>
       <title>Observability Log Derived Metrics - Game Changer</title>

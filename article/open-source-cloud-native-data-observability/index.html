@@ -14,17 +14,17 @@
     <title>
         
            
-               How deploying AWS Lambda with Terraform is a Win-Win &vert; Journey to the Cloud and Beyond
+               “Open Source Cloud Native Data Observability” &vert; Journey to the Cloud and Beyond
            
         
     </title>
-    <meta name="description" content="How deploying AWS Lambda with Terraform is a Win-Win - Journey to the Cloud and Beyond">
-    <meta itemprop="name" content="How deploying AWS Lambda with Terraform is a Win-Win">
-    <meta itemprop="description" content="How deploying AWS Lambda with Terraform is a Win-Win - Journey to the Cloud and Beyond">
-    <meta property="og:title" content="How deploying AWS Lambda with Terraform is a Win-Win">
-    <meta property="og:description" content="How deploying AWS Lambda with Terraform is a Win-Win - Journey to the Cloud and Beyond">
+    <meta name="description" content="“Open Source Cloud Native Data Observability” - Journey to the Cloud and Beyond">
+    <meta itemprop="name" content="“Open Source Cloud Native Data Observability”">
+    <meta itemprop="description" content="“Open Source Cloud Native Data Observability” - Journey to the Cloud and Beyond">
+    <meta property="og:title" content="“Open Source Cloud Native Data Observability”">
+    <meta property="og:description" content="“Open Source Cloud Native Data Observability” - Journey to the Cloud and Beyond">
     <meta property="og:image" content="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?size=200">
-    <meta property="og:url" content="https://mrmikemarshall.github.io/article/lambda-log-groups-post/">
+    <meta property="og:url" content="https://mrmikemarshall.github.io/article/open-source-cloud-native-data-observability/">
     <meta property="og:site_name" content="Journey to the Cloud and Beyond">
     <meta property="og:type" content="article">
 
@@ -34,8 +34,8 @@
     <script src="/modernizr-simple.js"></script>
 
     
-    <link href="/article/lambda-log-groups-post/" rel="alternate" type="application/rss+xml" title="Journey to the Cloud and Beyond" />
-    <link href="/article/lambda-log-groups-post/" rel="feed" type="application/rss+xml" title="Journey to the Cloud and Beyond" />
+    <link href="/article/open-source-cloud-native-data-observability/" rel="alternate" type="application/rss+xml" title="Journey to the Cloud and Beyond" />
+    <link href="/article/open-source-cloud-native-data-observability/" rel="feed" type="application/rss+xml" title="Journey to the Cloud and Beyond" />
     
 
     
@@ -106,7 +106,7 @@
         
     <div class="article-wrapper u-cf single">
         
-            <a class="bubble" href="https://mrmikemarshall.github.io/article/lambda-log-groups-post/">
+            <a class="bubble" href="https://mrmikemarshall.github.io/article/open-source-cloud-native-data-observability/">
     <i class="fas fa-fw fa-pencil-alt"></i>
 </a>
 
@@ -115,15 +115,15 @@
 
     <div class="content">
     <h1 class="article-title">
-        <a href="https://mrmikemarshall.github.io/article/lambda-log-groups-post/">
-            How deploying AWS Lambda with Terraform is a Win-Win
+        <a href="https://mrmikemarshall.github.io/article/open-source-cloud-native-data-observability/">
+            “Open Source Cloud Native Data Observability”
         </a>
     </h1>
 
     <div class="meta">
         
             
-                <span class="date moment">2021-02-21</span>
+                <span class="date moment">2021-05-02</span>
             
         
 
@@ -137,43 +137,35 @@
     
         
 
-        <p>In this blog post I will demonstrate how selecting the best tool for the job in the end can pay off resulting in both reduced complexity and lower costs.</p>
-<p>I was recently tasked with exporting CloudWatch logs from multiple AWS accounts into Grafana Loki, hosted in a central logging AWS account. My architecture leverages the event driven design pattern of subscribing a log sender Lambda function to a set of CloudWatch log groups.  The Lambda function is triggered as logs are written to each log group.  I then funnel the logs from each account into a single AWS SQS FIFO (First-In-First-Out) queue residing in the central logging account.  At the receiving end, a log router lambda which gets triggered by SQS when messages arrive on the queue.  I use this Lambda to route log records to instances of Fluent-Bit (blog post coming soon) and from there into Grafana Loki and Prometheus metrics (more the metrics in a future blog post).</p>
-<p>This architecture works well, however I ran into a limitation I’d not experienced before.  Till now I’ve mostly leveraged Serverless Framework for deploying Lambda code to AWS.  Serverless Framework generates a CloudFormation Template from it’s YAML configuration files which deploys the Lambda code and any additional infrastructure required to operate.  It turns out the maximum number of resources that a single CloudFormation Template (CFT) can contain is 500.  When deploying the architecture described above, roughly every 20 log groups requires a new CFT stack as that limit is quickly exceeded .  This also means a new copy of the same Lambda with a different name for every 20 log groups.   This is quickly becomes maintenance nightmare in the making.</p>
-<p>Terraform to the rescue!  Unlike CloudFormation, Terraform interacts directly with AWS APIs to create and destroy resources. As a result, there is no maximum resource limit.</p>
-<p>Using one of the Serverless Framework generated CFTs as a guide, I developed an equivalent Terraform project.</p>
-<p>Result:</p>
-<p>It works very nicely!</p>
-<p>Aside from the accomplishing the goal of overcoming the 500 max resource limitation, a couple of bonus benefits came with the Terraform implementation.</p>
-<p>Firstly, equivalent deployments can now see a reduction of roughly 10:1 in the required resource count and as a result, a lower cost.</p>
-<p>Ex. Single lambda subscribed to 47 log groups:</p>
-<table>
-<thead>
-<tr>
-<th>Method</th>
-<th>Resource count</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Serverless Framework</td>
-<td>~1200</td>
-</tr>
-<tr>
-<td>Terraform</td>
-<td>~100</td>
-</tr>
-</tbody>
-</table>
-<p>Secondly, changes to the Lambda function code or subscribed Log groups can be made with zero impact.</p>
-<p>To summarize, in this specific case, deciding to deviate from the norm and rewrite the deployment automation using using Terraform rather than industry tested Serverless Framework, resulted in a huge pay off.  Simpler maintenance and a lower AWS bill are definitely win-wins for any organization.</p>
-<p>Resources referenced:</p>
-<p><a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/SubscriptionFilters.html#LambdaFunctionExample">https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/SubscriptionFilters.html#LambdaFunctionExample</a>
-<a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cloudformation-limits.html">https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cloudformation-limits.html</a>
-<a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html">https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html</a>
-<a href="https://www.serverless.com/">https://www.serverless.com/</a>
-<a href="https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function">https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function</a>
-<a href="https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_subscription_filter">https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_subscription_filter</a></p>
+        <p>With less than 48 hours until FluentCon 2021 Europe, I’m so excited to see lots of people signing up for my talk on May 4th:</p>
+<p><a href="https://sched.co/iKok">Fluent Bit - Swiss Army Tool of Observability Data Ingestion - Michael Marshall</a></p>
+<p>Prior to FluentCon, I wanted to announce an open source project I just released in hope that it would be of use to the wider community:</p>
+<p><a href="https://github.com/neiman-marcus/fluent-bit-data-observability-platform">https://github.com/neiman-marcus/fluent-bit-data-observability-platform</a></p>
+<p>In short, this project is a Docker-Compose based, miniature version of it’s much larger production equivalent we host in the cloud today.</p>
+<p>With the initial relase of Fluent Bit Data Observability Platform (FBDOP), the following open source flagship CNCF observability log and metrics projects have been combined together:</p>
+<ul>
+<li><a href="https://fluentbit.io/">Fluent Bit</a></li>
+<li><a href="https://github.com/neiman-marcus/fluent-bit-out-prometheus-metrics">Fluent Bit - Output Prometheus Metrics Plugin</a></li>
+<li><a href="https://grafana.com/docs/loki/latest/clients/fluentbit/">Fluent Bit - Output Loki Logs Plugin</a></li>
+<li><a href="https://grafana.com/oss/grafana/">Grafana</a></li>
+<li><a href="https://grafana.com/oss/loki/">Grafana Loki Logs</a></li>
+<li><a href="https://prometheus.io/">Prometheus Metrics</a></li>
+<li><a href="https://github.com/prometheus/pushgateway">Prometheus Pushgateway</a></li>
+</ul>
+<p>(Coming Soon):</p>
+<ul>
+<li><a href="https://cortexmetrics.io/">Cortex Metrics</a></li>
+</ul>
+<p>With over of a year invested navigating the complex task of architecting a full cloud native open source data observability platform hosted on AWS, having successfully moved from POC (Proof-Of-Concept) to carrying production traffic, downtime wasn’t an option.</p>
+<p>Enter FBDOP!  The reason I initially created this enviornment was two fold, one I was having difficulty justifying cost deploying of a second semi-scaled down version of what I had in running in production, and two,  introducing a new version of any one of those upstream projects, or a change in configuration, could easily create downtime for the production cluster.</p>
+<p>In the end, while it has served me well, for development and test, it has also been adopted amongst teams within my company for use as a learning tool to gain a better understanding of the larger platform running in the cloud.</p>
+<p>My hope is that anyone attending FluentCon, or who simply has an interest in any or all of the combined projects, would find this environment as useful as I have.  Clone it, and change it! That’s what it’s for!</p>
+<p>If you have any questions, comments, or suggestions, please leave a comment on my blog, open a github issue or fork and open a PR on the github repository.
+Alternatively, you can find me in community Slack channels of each of the projects listed above as @Mike Marshall.</p>
+<p>Most of all enjoy!  Hope to see you at the talk!</p>
+<p>Thank You,
+Michael Marshall
+<a href="mailto:mrmikemarshall@gmail.com">mrmikemarshall@gmail.com</a></p>
 
     
 </div>
